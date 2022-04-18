@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MyContext from '../context/MyContext';
 
 function SearchForm() {
@@ -18,6 +18,7 @@ function SearchForm() {
   const {
     filterByName,
     setFilterByName,
+    filterByNumericValues,
     setFilterByNumericValues,
   } = useContext(MyContext);
   const { name } = filterByName;
@@ -51,6 +52,36 @@ function SearchForm() {
     setFilterByNumericValues((state) => (
       [...state, numericFilter]
     ));
+  }
+
+  useEffect(() => {
+    setNumericFilter({
+      column: dropdownColumn[0],
+      comparison: 'maior que',
+      value: 0,
+    });
+  }, [dropdownColumn]);
+
+  function handleRemoveFilter({ target }) {
+    const { value } = target;
+    if (value === 'one') {
+      setdropdownColumn((state) => ([
+        ...state,
+        target.name,
+      ]));
+      setFilterByNumericValues(
+        filterByNumericValues.filter((element) => element.column !== target.name),
+      );
+    } if (value === 'all') {
+      setdropdownColumn([
+        'population',
+        'orbital_period',
+        'diameter',
+        'rotation_period',
+        'surface_water',
+      ]);
+      setFilterByNumericValues([]);
+    }
   }
 
   return (
@@ -115,6 +146,32 @@ function SearchForm() {
       >
         Filter
       </button>
+      <div>
+        { filterByNumericValues.map((it) => (
+          <p
+            key={ `${it.column} filter` }
+            data-testid="filter"
+          >
+            {`${it.column} ${it.comparison} ${it.value}`}
+            <button
+              type="button"
+              name={ it.column }
+              value="one"
+              onClick={ handleRemoveFilter }
+            >
+              X
+            </button>
+          </p>
+        ))}
+        <button
+          data-testid="button-remove-filters"
+          type="button"
+          value="all"
+          onClick={ handleRemoveFilter }
+        >
+          Remover Todas as Filtragens
+        </button>
+      </div>
     </form>
   );
 }
