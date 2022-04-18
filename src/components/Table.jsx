@@ -4,10 +4,10 @@ import MyContext from '../context/MyContext';
 function Table() {
   const { data, filterByName, filterByNumericValues } = useContext(MyContext);
 
-  function filterNumeric(list) {
+  function filterNumeric(list, filter) {
     const filteredList = [];
-    if (filterByNumericValues[0]) {
-      const { column, comparison, value } = filterByNumericValues[0];
+    if (filter) {
+      const { column, comparison, value } = filter;
       switch (comparison) {
       case 'maior que': {
         list.forEach((element) => {
@@ -40,6 +40,15 @@ function Table() {
     return list;
   }
 
+  function filterVariousNumeric(planetList) {
+    let list = [...planetList];
+    filterByNumericValues.forEach((filter) => {
+      const newList = filterNumeric(list, filter);
+      list = [...newList];
+    });
+    return list;
+  }
+
   const tableHeaders = [
     'Name',
     'Rotation Period',
@@ -68,7 +77,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        { filterNumeric(data.filter(
+        { filterVariousNumeric(data.filter(
           (element) => element.name.includes(filterByName.name),
         )).map((planet) => (
           <tr key={ planet.name }>
