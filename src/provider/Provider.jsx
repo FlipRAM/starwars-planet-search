@@ -7,6 +7,7 @@ function Provider({ children }) {
   const [filterByName, setFilterByName] = useState({
     name: '',
   });
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +22,8 @@ function Provider({ children }) {
     data,
     filterByName,
     setFilterByName,
+    filterByNumericValues,
+    setFilterByNumericValues,
   };
 
   return (
