@@ -7,6 +7,13 @@ function SearchForm() {
     comparison: 'maior que',
     value: 0,
   });
+  const [dropdownColumn, setdropdownColumn] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
   const {
     filterByName,
@@ -14,6 +21,12 @@ function SearchForm() {
     setFilterByNumericValues,
   } = useContext(MyContext);
   const { name } = filterByName;
+
+  const dropdownComparison = [
+    'maior que',
+    'menor que',
+    'igual a',
+  ];
 
   function handleChange({ target }) {
     const { value } = target;
@@ -32,24 +45,13 @@ function SearchForm() {
   }
 
   function sendFilter() {
+    const { column } = numericFilter;
+    const indexToRmv = dropdownColumn.indexOf(column);
+    setdropdownColumn(dropdownColumn.filter((element, index) => index !== indexToRmv));
     setFilterByNumericValues((state) => (
       [...state, numericFilter]
     ));
   }
-
-  const dropdownColumn = [
-    'population',
-    'orbital_period',
-    'diameter',
-    'rotation_period',
-    'surface_water',
-  ];
-
-  const dropdownComparison = [
-    'maior que',
-    'menor que',
-    'igual a',
-  ];
 
   return (
     <form>
