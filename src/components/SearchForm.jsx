@@ -14,6 +14,12 @@ function SearchForm() {
     'rotation_period',
     'surface_water',
   ]);
+  const [order, setOrder] = useState({
+    order: {
+      column: 'population',
+      sort: 'ASC',
+    },
+  });
 
   const {
     filterByName,
@@ -27,6 +33,14 @@ function SearchForm() {
     'maior que',
     'menor que',
     'igual a',
+  ];
+
+  const columnsToOrder = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
   ];
 
   function handleChange({ target }) {
@@ -82,6 +96,10 @@ function SearchForm() {
       ]);
       setFilterByNumericValues([]);
     }
+  }
+
+  function handleOrder() {
+    setactiveOrder
   }
 
   return (
@@ -170,6 +188,66 @@ function SearchForm() {
           onClick={ handleRemoveFilter }
         >
           Remover Todas as Filtragens
+        </button>
+      </div>
+      <div>
+        <label htmlFor="column-order">
+          Order:
+          <select
+            data-testid="column-sort"
+            id="column-order"
+            name="column-order"
+            onChange={ handleOrder }
+          >
+            {columnsToOrder.map((each) => (
+              <option
+                key={ each }
+                onChange={ setOrder((state) => ({
+                  order: {
+                    ...state.order,
+                    column: each,
+                  },
+                })) }
+              >
+                {each}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor="order">
+          Ascending
+          <input
+            data-testid="column-sort-input-asc"
+            type="radio"
+            value="ASC"
+            onChange={ setOrder((state) => ({
+              order: {
+                ...state.order,
+                sort: 'ASC',
+              },
+            })) }
+          />
+        </label>
+        <label htmlFor="order">
+          Descending
+          <input
+            data-testid="column-sort-input-desc"
+            type="radio"
+            value="DESC"
+            onChange={ setOrder((state) => ({
+              order: {
+                ...state.order,
+                sort: 'DESC',
+              },
+            })) }
+          />
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ handleOrder }
+        >
+          Order
         </button>
       </div>
     </form>
